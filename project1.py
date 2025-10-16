@@ -8,7 +8,7 @@ import unittest
 #7671 7882
 #ahalabis
 #worked with Anna Kerhoulas and Claire Fuller (kind of had to submit separate without each other's code as group repo would not work, emailed Barbara)
-#did ask chat to help with some of the special test cases with missing data and such
+#did ask chat to help with some of the special test cases with missing data and such, prompted with what originally had and asked it to show where it wasn't working
 
 #Reading CSV into a list of dicts
 def load_penguins(filename):
