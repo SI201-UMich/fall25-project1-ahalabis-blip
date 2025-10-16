@@ -3,6 +3,8 @@ import os
 from collections import defaultdict
 import unittest
 
+#did ask chat to help with some of the special test cases with missing data and such
+
 #Reading CSV into a list of dicts
 def load_penguins(filename):
     data = []
@@ -60,7 +62,7 @@ def calculate_species_island_distribution(penguins):
         if not (year and species and island): #if any of these are missing or not here it will skip
             continue
 
-        # if the year isn't in the total and conts dict, create a new dictionary 
+        # if the year isn't in the total and counts dict, create a new dictionary 
         if year not in totals:
             totals[year] = {}
             counts[year] = {}
@@ -94,7 +96,7 @@ def main():
     for year, island in per_year.items():
         print(f"  {year}: {island}")
     
-    print("\n--- Species Distribution by Island and Year ---")
+    print("\nSpecies Distribution by Island and Year")
     distribution = calculate_species_island_distribution(penguin_data)
 
     for year, species_data in distribution.items():
