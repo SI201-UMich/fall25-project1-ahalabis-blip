@@ -157,4 +157,65 @@ class TestMostPop(unittest.TestCase):
             self.assertEqual(overall, "Torgersen")
             self.assertEqual(per_year["2008"], "Torgersen")
 
+class TestSpeciesIslandDistribution(unittest.TestCase):
+    def setUp(self):
+        self.sample_penguins = [
+            {"species": "Adelie", "island": "Torgersen", "year": "2007"},
+            {"species": "Adelie", "island": "Torgersen", "year": "2007"},
+            {"species": "Gentoo", "island": "Biscoe", "year": "2007"},
+            {"species": "Gentoo", "island": "Biscoe", "year": "2008"},
+            {"species": "Adelie", "island": "Dream", "year": "2008"},
+            {"species": "Adelie", "island": "Dream", "year": "2008"},
+        ]
+
+    # Test 1: Normal case with many species and years
+    def test_distribution_normal(self):
+        result = calculate_species_island_distribution(self.sample_penguins)
+        self.assertIn("2007", result)
+        self.assertIn("Adelie", result["2007"])
+        self.assertIn("Torgersen", result["2007"]["Adelie"])
+        self.assertEqual(result["2007"]["Adelie"]["Torgersen"], 100.0)
+        self.assertEqual(result["2008"]["Adelie"]["Dream"], 100.0)
+
+    #Test 2: All species on one island
+    def test_single_island(self):
+        data = [
+            {"species": "Gentoo", "island": "Biscoe", "year": "2009"},
+            {"species": "Gentoo", "island": "Biscoe", "year": "2009"},
+        ]
+        result = calculate_species_island_distribution(data)
+        self.assertEqual(result["2009"]["Gentoo"]["Biscoe"], 100.0)
+        self.assertEqual(len(result["2009"]["Gentoo"]), 1)
+
+    #Tett 3: Missing data
+    def test_missing_data(self):
+        data = [
+            {"species": "Adelie", "island": "Torgersen", "year": "2008"},
+            {"species": "Adelie", "island": "", "year": "2008"},
+            {"species": "Gentoo", "island": None, "year": "2008"},
+            {"species": "Chinstrap", "island": "Dream", "year": ""},
+        ]
+        result = calculate_species_island_distribution(data)
+        # Only one valid Adelie entry on Torgersen
+        self.assertEqual(result["2008"]["Adelie"]["Torgersen"], 100.0)
+        self.assertEqual(len(result), 1)
+
+    #Test 4: Multiple islands for same species and year
+    def test_multiple_islands_same_species(self):
+        data = [
+            {"species": "Adelie", "island": "Biscoe", "year": "2008"},
+            {"species": "Adelie", "island": "Dream", "year": "2008"},
+            {"species": "Adelie", "island": "Biscoe", "year": "2008"},
+        ]
+        result = calculate_species_island_distribution(data)
+        self.assertAlmostEqual(result["2008"]["Adelie"]["Biscoe"], 66.67, delta=0.01)
+        self.assertAlmostEqual(result["2008"]["Adelie"]["Dream"], 33.33, delta=0.01)
+
+
+
+
+if __name__ == "__main__":
+    main()
+    unittest.main()
+
 
