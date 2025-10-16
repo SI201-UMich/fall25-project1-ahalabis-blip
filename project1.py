@@ -105,5 +105,56 @@ def main():
                 print(f"    {island}: {pct}%")
 
 
+class TestMostPop(unittest.TestCase):
+        def setUp(self):
+            self.sample_penguins = [
+            {"species": "Adelie", "island": "Torgersen", "year": "2007"},
+            {"species": "Adelie", "island": "Torgersen", "year": "2007"},
+            {"species": "Gentoo", "island": "Biscoe", "year": "2008"},
+            {"species": "Chinstrap", "island": "Dream", "year": "2008"},
+            {"species": "Chinstrap", "island": "Dream", "year": "2008"},
+            {"species": "Adelie", "island": "Torgersen", "year": "2008"},
+        ]
+
+    #Test 1: normal test case with a clear largest island
+        def test_most_pop_normal(self):
+            overall, per_year = most_pop(self.sample_penguins)
+            self.assertEqual(overall, "Torgersen")
+            self.assertEqual(per_year["2007"], "Torgersen")
+            self.assertEqual(per_year["2008"], "Dream")
+
+    #Test 2: Only one island
+        def test_most_pop_single_island(self):
+            data = [
+            {"species": "Adelie", "island": "Biscoe", "year": "2007"},
+            {"species": "Adelie", "island": "Biscoe", "year": "2008"},
+        ]
+            overall, per_year = most_pop(data)
+            self.assertEqual(overall, "Biscoe")
+            self.assertTrue(all(island == "Biscoe" for island in per_year.values()))
+
+    #Test 3: A tie between the biggest islands
+        def test_most_pop_tie(self):
+            data = [
+            {"species": "Adelie", "island": "Dream", "year": "2007"},
+            {"species": "Adelie", "island": "Biscoe", "year": "2007"},
+        ]
+            overall, per_year = most_pop(data)
+        #if there is a tie, max returns the first key entered
+            self.assertIn(overall, ["Dream", "Biscoe"])
+            self.assertIn(per_year["2007"], ["Dream", "Biscoe"])
+
+    #Test 4: there are missing data entries
+        def test_most_pop_with_missing_data(self):
+            data = [
+            {"species": "Adelie", "island": "Torgersen", "year": "2008"},
+            {"species": "Adelie", "island": "", "year": "2008"},
+            {"species": "Gentoo", "island": None, "year": "2008"},
+            {"species": "Chinstrap", "island": "Dream", "year": ""},
+        ]
+            overall, per_year = most_pop(data)
+        # Only valid entry is Torgersen in 2008
+            self.assertEqual(overall, "Torgersen")
+            self.assertEqual(per_year["2008"], "Torgersen")
 
 
