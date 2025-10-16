@@ -3,6 +3,11 @@ import os
 from collections import defaultdict
 import unittest
 
+
+#Abbey Halabis
+#7671 7882
+#ahalabis
+#worked with Anna Kerhoulas and Claire Fuller (kind of had to submit separate without each other's code as group repo would not work, emailed Barbara)
 #did ask chat to help with some of the special test cases with missing data and such
 
 #Reading CSV into a list of dicts
