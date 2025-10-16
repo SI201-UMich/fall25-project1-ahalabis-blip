@@ -85,4 +85,25 @@ def calculate_species_island_distribution(penguins):
 
     return result
 
+def main():
+    penguin_data = load_penguins("penguins.csv")  # load the data file
+    overall, per_year = most_pop(penguin_data)  # get results
+
+    print("Overall island with the most penguins:", overall)
+    print("\nIsland with the most penguins per year:")
+    for year, island in per_year.items():
+        print(f"  {year}: {island}")
+    
+    print("\n--- Species Distribution by Island and Year ---")
+    distribution = calculate_species_island_distribution(penguin_data)
+
+    for year, species_data in distribution.items():
+        print(f"\nYear {year}:")
+        for species, island_data in species_data.items():
+            print(f"  {species}:")
+            for island, pct in island_data.items():
+                print(f"    {island}: {pct}%")
+
+
+
 
