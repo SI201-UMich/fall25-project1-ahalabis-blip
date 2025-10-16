@@ -42,4 +42,47 @@ def most_pop(penguins):   #Abbey Halabis's calculation
 
     return overall_largest, largest_per_year
 
+def calculate_species_island_distribution(penguins):
+    """
+    Calculates the percentage of each species living on each island in each year.
+    Returns: {year: {species: {island: percentage}}}
+    penguins is a list of dicts wheere each dict represents one penguin
+    """
+    totals = {}     # total per species per year
+    counts = {}     # counts- tracks how many penguins per species lives on the island per year
+
+    #this loops through every penguin in the list 
+    #gets the exact year, species and island for the penguin
+    for penguin in penguins:
+        year = penguin.get("year")
+        species = penguin.get("species")
+        island = penguin.get("island")
+        if not (year and species and island): #if any of these are missing or not here it will skip
+            continue
+
+        # if the year isn't in the total and conts dict, create a new dictionary 
+        if year not in totals:
+            totals[year] = {}
+            counts[year] = {}
+        #if the species hasn't been seen for the year
+        if species not in totals[year]:
+            totals[year][species] = 0 #initializes to 0 becasue the penguin hasn't been counted yet
+            counts[year][species] = {} 
+
+        
+        totals[year][species] += 1 #adds one to the total number of the certain species for the year
+        counts[year][species][island] = counts[year][species].get(island, 0) + 1 #adds one to the number, if it hasn't already been counnted in the dict, it will start at 0
+
+    
+    result = {} #this will store the final percents of penguins
+    for year in counts: #loop through each year in the counts
+        result[year] = {}
+        for species in counts[year]: #loops through the specific species for the year
+            result[year][species] = {}
+            total = totals[year][species]
+            for island, num in counts[year][species].items(): #loop through the island for the species and year
+                result[year][species][island] = round((num / total) * 100, 2) #calc percent, rounds to two places
+
+    return result
+
 
